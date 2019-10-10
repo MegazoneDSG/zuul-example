@@ -1,0 +1,39 @@
+spring:
+  application:
+      name: cloudclass-gateway
+  profiles:
+    active: local
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    org:
+      springframework:
+        cloud:
+          netflix: trace
+
+eureka:
+  client:
+    enabled: false
+
+---
+spring:
+  profiles: local
+
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  #ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  addProxyHeaders: true
+
+  routes:
+    kb-db-connector:
+      path: /v1/**
+      url: https://www.naver.com/v1
+      stripPrefix: true
+
